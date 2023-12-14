@@ -24,4 +24,4 @@ sequenceDiagram
     activate server
     server-->>browser: [{ "content": "My new note", "date": "2023-10-10" }, ... ]
     deactivate server
-´´´
+```
