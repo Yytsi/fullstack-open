@@ -8,5 +8,5 @@ sequenceDiagram
     server-->>browser: 201 created
     deactivate server
 
-    Note right of browser: Note is added locally to the list, which is updated to the server
+    Note right of browser: Note is added to the local notes list and also sent to the server
 ```
