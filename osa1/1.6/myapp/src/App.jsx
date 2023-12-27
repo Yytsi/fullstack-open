@@ -31,7 +31,6 @@ const Statistics = (props) => {
   );
 }
 
-
 const Button = (props) => {
   return (
     <button onClick={props.handler}>
