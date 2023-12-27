@@ -1,5 +1,45 @@
 import { useState } from 'react'
 
+const StatisticsLine = (props) => {
+  return (
+    <tr>
+      <td>{props.text}</td>
+      <td>{props.value} {props.perc ? "%" : ""}</td>
+    </tr>
+  )
+}
+
+const Statistics = (props) => {
+  const { good, neutral, bad } = props;
+  return (good + neutral + bad) !== 0 ? (
+    <div>
+      <table>
+        <tbody>
+          <StatisticsLine text="good" value={good} />
+          <StatisticsLine text="neutral" value={neutral} />
+          <StatisticsLine text="bad" value={bad} />
+          <StatisticsLine text="all" value={good + neutral + bad} />
+          <StatisticsLine text="average" value={(good - bad) / (good + neutral + bad)} />
+          <StatisticsLine text="positive" value={good / (good + neutral + bad) * 100} perc={true} />
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <div>
+      No feedback given
+    </div>
+  );
+}
+
+
+const Button = (props) => {
+  return (
+    <button onClick={props.handler}>
+      {props.children}
+    </button>
+  )
+}
+
 const App = () => {
   // tallenna napit omaan tilaansa
   const [good, setGood] = useState(0)
@@ -20,21 +60,17 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={handleGoodClick}>
+      <Button handler={handleGoodClick}>
         good
-      </button>
-      <button onClick={handleNeutralClick}>
+      </Button>
+      <Button handler={handleNeutralClick}>
         neutral
-      </button>
-      <button onClick={handleBadClick}>
+      </Button>
+      <Button handler={handleBadClick}>
         bad
-      </button>
+      </Button>
       <h2>statistics</h2>
-      <div>
-        good {good}<br />
-        neutral {neutral}<br />
-        bad {bad}<br />
-      </div>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
