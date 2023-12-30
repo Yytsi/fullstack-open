@@ -13,7 +13,7 @@ const App = () => {
         <div>
           name: <input onChange={(e) => {
             setNewName(e.target.value)
-          }}/>
+          }} value={newName}/>
         </div>
         <div>
           <button type="submit" onClick={(e) => {
