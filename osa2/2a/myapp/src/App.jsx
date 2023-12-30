@@ -1,3 +1,5 @@
+import Course from './components/Course'
+
 const Header = (props) => {
   return (
     <h1>{props.course}</h1>
@@ -18,16 +20,6 @@ const Content = (props) => {
       {props.parts.map(part =>
         <Part part={part.name} exercises={part.exercises} key={part.id}/>
       )}
-    </>
-  )
-}
-
-const Course = (props) => {
-  return (
-    <>
-      <Header course={props.course.name} />
-      <Content parts={props.course.parts} />
-      <b>total of {props.course.parts.reduce((a, c) => a + c.exercises, 0)} exercises</b>
     </>
   )
 }
@@ -81,7 +73,7 @@ const App = () => {
   return (
     <div>
       {courses.map(course => 
-          <Course course={course} key={course.id}/>
+          <Course course={course} Header={Header} Content={Content} key={course.id}/>
       )}
     </div>
   )
