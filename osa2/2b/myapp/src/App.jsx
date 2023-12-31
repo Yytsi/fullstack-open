@@ -1,5 +1,40 @@
 import { useState } from 'react'
 
+const FilterForm = ({ filterName, setFilterName }) => {
+  return (
+    <div>
+      filter shown with <input onChange={(e) => {
+        setFilterName(e.target.value)
+      }} value={filterName}/>
+    </div>
+  )
+}
+
+const AddButton = ({ persons, newName, newNumber, setPersons, setNewName, setNewNumber }) => {
+  return (
+    <div>
+      <button type="submit" onClick={(e) => {
+        e.preventDefault()
+        if (persons.find(person => person.name === newName)) {
+          alert(`${newName} is already added to phonebook`)
+          return
+        }
+        setPersons(persons.concat({ name: newName, number: newNumber }))
+        setNewName('')
+        setNewNumber('')
+      }}>add</button>
+    </div>
+  )
+}
+
+const ShowPersons = ({ persons, filterName }) => {
+  return (
+    <ul>
+      {persons.filter(person => person.name.toLowerCase().startsWith(filterName.toLowerCase())).map(person => <li key={person.name}>{person.name} {person.number}</li>)}
+    </ul>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456' },
@@ -17,9 +52,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <form>
         <div>
-          filter shown with <input onChange={(e) => {
-            setFilterName(e.target.value)
-          }} value={filterName}/>
+          <FilterForm filterName={filterName} setFilterName={setFilterName}/>
         </div>
         <h2>add a new</h2>
         <div>
@@ -33,23 +66,12 @@ const App = () => {
           }} value={newNumber}/>
         </div>
         <div>
-          <button type="submit" onClick={(e) => {
-            e.preventDefault()
-            if (persons.find(person => person.name === newName)) {
-              alert(`${newName} is already added to phonebook`)
-              return
-            }
-            setPersons(persons.concat({ name: newName, number: newNumber }))
-            setNewName('')
-            setNewNumber('')
-          }}>add</button>
+          <AddButton persons={persons} newName={newName} newNumber={newNumber} setPersons={setPersons} setNewName={setNewName} setNewNumber={setNewNumber} />
         </div>
       </form>
       <div>debug: |{newName}|</div>
       <h2>Numbers</h2>
-      <ul>
-        {persons.filter(person => person.name.toLowerCase().startsWith(filterName.toLowerCase())).map(person => <li key={person.name}>{person.name} {person.number}</li>)}
-      </ul>
+      <ShowPersons persons={persons} filterName={filterName}/>
     </div>
   )
 
