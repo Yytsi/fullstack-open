@@ -25,6 +25,10 @@ const AddButton = ({ persons, newName, newNumber, setPersons, setNewName, setNew
               showNotification(`Updated ${newName}`, true)
               setNewName('')
               setNewNumber('')
+            }).catch(error => {
+              console.log("error", error)
+              showNotification(`Information of ${newName} has already been removed from server`, false)
+              setPersons(persons.filter(person => person.id !== personId))
             })
           }
           return
@@ -106,6 +110,10 @@ const App = () => {
 
   const deletePerson = (id) => {
     personService.remove(id).then(response => {
+      setPersons(persons.filter(person => person.id !== id))
+    }).catch(error => {
+      console.log("error", error)
+      showNotification(`Information of ${persons.find(person => person.id === id).name} has already been removed from server`, false)
       setPersons(persons.filter(person => person.id !== id))
     })
   }
