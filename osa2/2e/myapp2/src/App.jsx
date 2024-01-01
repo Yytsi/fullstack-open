@@ -10,7 +10,7 @@ const FindCountries = ( countrySearch, setCountries ) => {
   })
 }
 
-const CountriesComp = ({countries}) => {
+const CountriesComp = ({countries, searchCountry}) => {
   if (countries.length > 10) {
     return (
       <div>
@@ -20,7 +20,9 @@ const CountriesComp = ({countries}) => {
   } else if (countries.length > 1) {
     return (
       <div>
-        {countries.map(country => <div key={country.name.common}>{country.name.common}</div>)}
+        {countries.map(country => 
+          <div key={country.name.common}>{country.name.common}<button onClick={() => searchCountry(country.name.common)}>show</button></div>
+        )}
       </div>
     )
   } else if (countries.length === 1) {
@@ -45,15 +47,15 @@ const App = () => {
   const [countrySearch, setCountrySearch] = useState('')
   const [countries, setCountries] = useState([])
 
-  const handleCountrySearchChange = (event) => {
-    FindCountries(event.target.value, setCountries)
-    setCountrySearch(event.target.value)
+  const searchCountry = (country) => {
+    FindCountries(country, setCountries)
+    setCountrySearch(country)
   }
 
   return (
     <div>
-      find countries <input value={countrySearch} onChange={handleCountrySearchChange}/>
-      <CountriesComp countries={countries}/>
+      find countries <input value={countrySearch} onChange={(e) => searchCountry(e.target.value)}/>
+      <CountriesComp countries={countries} searchCountry={searchCountry}/>
     </div>
   )
 }
