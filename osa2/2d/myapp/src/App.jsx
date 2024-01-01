@@ -32,10 +32,26 @@ const AddButton = ({ persons, newName, newNumber, setPersons, setNewName, setNew
   )
 }
 
-const ShowPersons = ({ persons, filterName }) => {
+const PersonRow = ({ person, deletePerson }) => {
+  return (
+    <li>
+      {person.name} {person.number} <button onClick={() => {
+        if (window.confirm(`Delete ${person.name}?`)) {
+          deletePerson(person.id)
+        }
+      }}>delete</button>
+    </li>
+  )
+}
+
+const ShowPersons = ({ persons, filterName, deletePerson }) => {
   return (
     <ul>
-      {persons.filter(person => person.name.toLowerCase().startsWith(filterName.toLowerCase())).map(person => <li key={person.name}>{person.name} {person.number}</li>)}
+      {persons.filter(person => 
+        person.name.toLowerCase().startsWith(filterName.toLowerCase()))
+        .map(person =>
+            <PersonRow key={person.name} person={person} deletePerson={deletePerson}/>
+           )}
     </ul>
   )
 }
@@ -50,6 +66,12 @@ const App = () => {
   const getPersonsFromOnline = () => {
     personService.getAll().then(response => {
       setPersons(response.data)
+    })
+  }
+
+  const deletePerson = (id) => {
+    personService.remove(id).then(response => {
+      setPersons(persons.filter(person => person.id !== id))
     })
   }
 
@@ -79,7 +101,7 @@ const App = () => {
       </form>
       <div>debug: |{newName}|</div>
       <h2>Numbers</h2>
-      <ShowPersons persons={persons} filterName={filterName}/>
+      <ShowPersons persons={persons} filterName={filterName} deletePerson={deletePerson}/>
     </div>
   )
 
