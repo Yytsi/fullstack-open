@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
-import axios from 'axios'
-
 
 const FilterForm = ({ filterName, setFilterName }) => {
   return (
@@ -19,10 +17,19 @@ const AddButton = ({ persons, newName, newNumber, setPersons, setNewName, setNew
       <button type="submit" onClick={(e) => {
         e.preventDefault()
         if (persons.find(person => person.name === newName)) {
-          alert(`${newName} is already added to phonebook`)
+          if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+            const personId = persons.find(person => person.name === newName).id
+            setPersons(persons.map(person => person.id !== personId ? person : { ...person, number: newNumber }))
+            personService.update(personId, { name: newName, number: newNumber }).then(response => {
+              console.log("updated", newName, newNumber)
+              setNewName('')
+              setNewNumber('')
+            })
+          }
           return
         }
         personService.create({ name: newName, number: newNumber }).then(response => {
+          console.log("created", newName, newNumber)
           setPersons(persons.concat(response.data))
           setNewName('')
           setNewNumber('')
